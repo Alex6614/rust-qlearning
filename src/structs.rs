@@ -13,14 +13,14 @@ impl State {
 
 /// A tuple of a state and an action (which is a string), which is used as a key in the q_values HashMap to find the value of taking a certain action while in a certain state
 #[derive(Hash, Eq, PartialEq, Debug)]
-pub struct Key<'a> {
+pub struct Key {
 	state: State,
-	action: &'a str,
+	action: String,
 }
 
-impl<'a> Key<'a> {
+impl Key {
 	// Create a new State
-	pub fn new(state: State, action: &'a str) -> Key<'a> {
+	pub fn new(state: State, action: String) -> Key {
 		Key { state: state, action: action }
 	}
 }
