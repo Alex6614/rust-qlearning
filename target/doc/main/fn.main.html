@@ -46,12 +46,10 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-88' class='srclink' href='../src/main/main.rs.html#11-99' title='goto source code'>[src]</a></span></h1>
-<pre class='rust fn'>fn main()</pre><div class='docblock'><p>This is the main function that will interact with the system/game. In terms of how it works, it creates a HashMap that stores the reward for taking an action at a particular state. After peforming the action, the value is updated with the reward found in the next state, and the max reward that can be gotten from any actions taken from the next state. This causes a form of backpropogation which allows for the algorithm to know how to get to the state with the highest reward.</p>
+        </span><a id='src-86' class='srclink' href='../src/main/main.rs.html#13-24' title='goto source code'>[src]</a></span></h1>
+<pre class='rust fn'>fn main()</pre><div class='docblock'><p>Initializes the Q-value table and the gamma number used in Q-Learning, then runs the game infinitely</p>
 
-<p>For the time being, this program is not too complicated. It is simply split between a file that contains the main function that loops through the game and performs the algorithm, and another file that contains other structs that are useful.</p>
-
-<p>GOALS FOR NEXT WEEK: be able to interact with the modified castle game I created, refine the loop, introduce randomness in deciding on how to find the next action, split up main() into separate functions to better see how things fit together and allow for orthogonal coding.</p>
+<p>TODO: Get rid of all the warnings</p>
 </div></section>
     <section id='search' class="content hidden"></section>
 

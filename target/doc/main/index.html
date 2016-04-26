@@ -46,9 +46,9 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/main/main.rs.html#1-99' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/main/main.rs.html#1-147' title='goto source code'>[src]</a></span></h1>
 <h2 id='reexports' class='section-header'><a href="#reexports">Reexports</a></h2>
-<table><tr><td><code>extern crate std as std;</code></td></tr><tr><td><code>use std::prelude::<a class='mod' href='https://doc.rust-lang.org/nightly/std/prelude/v1/index.html' title='std::prelude::v1'>v1</a>::*;</code></td></tr><tr><td><code>use structs::{<a class='struct' href='../main/structs/struct.State.html' title='main::structs::State'>State</a>, <a class='struct' href='../main/structs/struct.Key.html' title='main::structs::Key'>Key</a>};</code></td></tr><tr><td><code>use std::collections::<a class='struct' href='https://doc.rust-lang.org/nightly/std/collections/hash/map/struct.HashMap.html' title='std::collections::hash::map::HashMap'>HashMap</a>;</code></td></tr><tr><td><code>use std::<a class='mod' href='https://doc.rust-lang.org/nightly/std/io/index.html' title='std::io'>io</a>;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table><tr><td><code>extern crate std as std;</code></td></tr><tr><td><code>extern crate rand;</code></td></tr><tr><td><code>use std::prelude::<a class='mod' href='https://doc.rust-lang.org/nightly/std/prelude/v1/index.html' title='std::prelude::v1'>v1</a>::*;</code></td></tr><tr><td><code>use rand::<a class='trait' href='https://doc.rust-lang.org/rand/rand/trait.Rng.html' title='rand::Rng'>Rng</a>;</code></td></tr><tr><td><code>use structs::{<a class='struct' href='../main/structs/struct.State.html' title='main::structs::State'>State</a>, <a class='struct' href='../main/structs/struct.Key.html' title='main::structs::Key'>Key</a>};</code></td></tr><tr><td><code>use std::collections::<a class='struct' href='https://doc.rust-lang.org/nightly/std/collections/hash/map/struct.HashMap.html' title='std::collections::hash::map::HashMap'>HashMap</a>;</code></td></tr><tr><td><code>use std::<a class='mod' href='https://doc.rust-lang.org/nightly/std/io/index.html' title='std::io'>io</a>;</code></td></tr><tr><td><code>use std::process::{<a class='struct' href='https://doc.rust-lang.org/nightly/std/process/struct.Command.html' title='std::process::Command'>Command</a>, <a class='struct' href='https://doc.rust-lang.org/nightly/std/process/struct.ChildStdout.html' title='std::process::ChildStdout'>ChildStdout</a>, <a class='struct' href='https://doc.rust-lang.org/nightly/std/process/struct.Stdio.html' title='std::process::Stdio'>Stdio</a>};</code></td></tr><tr><td><code>use std::io::<a class='mod' href='https://doc.rust-lang.org/nightly/std/io/prelude/index.html' title='std::io::prelude'>prelude</a>::*;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
                     <tr class=' module-item'>
                         <td><a class='mod' href='structs/index.html'
@@ -60,10 +60,28 @@
                 </table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
 <table>
                     <tr class=' module-item'>
+                        <td><a class='fn' href='fn.decide.html'
+                               title='main::decide'>decide</a></td>
+                        <td class='docblock short'>
+                             <p>Decides on which action to use given the Q-value table and what actions are available.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
                         <td><a class='fn' href='fn.main.html'
                                title='main::main'>main</a></td>
                         <td class='docblock short'>
-                             <p>This is the main function that will interact with the system/game. In terms of how it works, it creates a HashMap that stores the reward for taking an action at a particular state. After peforming the action, the value is updated with the reward found in the next state, and the max reward that can be gotten from any actions taken from the next state. This causes a form of backpropogation which allows for the algorithm to know how to get to the state with the highest reward.</p>
+                             <p>Initializes the Q-value table and the gamma number used in Q-Learning, then runs the game infinitely</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.run_game.html'
+                               title='main::run_game'>run_game</a></td>
+                        <td class='docblock short'>
+                             <p>Runs the game and updates the Q-Value table as it plays</p>
 
                         </td>
                     </tr>
