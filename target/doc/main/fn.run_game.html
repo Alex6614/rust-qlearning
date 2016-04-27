@@ -49,11 +49,11 @@
         </span><a id='src-94' class='srclink' href='../src/main/main.rs.html#37-133' title='goto source code'>[src]</a></span></h1>
 <pre class='rust fn'>fn run_game(q_values: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/std/collections/hash/map/struct.HashMap.html' title='std::collections::hash::map::HashMap'>HashMap</a>&lt;<a class='struct' href='../main/structs/struct.Key.html' title='main::structs::Key'>Key</a>, <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>&gt;, gamma: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>, decision_policy: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></pre><div class='docblock'><p>Runs the game and updates the Q-Value table as it plays.</p>
 
-<p>This can be run on any game that generates output in a certain format (State, Reward, Actions). Stops when the game quits.</p>
+<p>This can be run on any game that generates output in a certain format (State, Reward, Actions). </p>
 
-<p>Utilizes child processes to run the game.</p>
+<p>Utilizes child processes to run the game. Receives and handles standard output of the game executable by collecting them into structures like vecs for actions. Utilizes find_best on the current state to find the best action in order to perform an update for the previous state and previous action taken. Then uses the decide function to decide what action to take next. This is affected by chance.</p>
 
-<p>Terminates when the game quits (Once the game quits, program will run into an error when trying to parse the next state. The error is handled by returning the current reward)</p>
+<p>This function contains a loop which terminates when the game quits (Once the game quits, program will run into an error when trying to parse the next state. The error is handled by returning the current reward). It will continuously loop between looking for standard output, updating the previous state, and then deciding on which action to take next.</p>
 </div></section>
     <section id='search' class="content hidden"></section>
 

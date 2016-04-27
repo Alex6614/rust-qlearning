@@ -29,11 +29,11 @@ fn main() {
 
 /// Runs the game and updates the Q-Value table as it plays.
 ///
-/// This can be run on any game that generates output in a certain format (State, Reward, Actions). Stops when the game quits.
+/// This can be run on any game that generates output in a certain format (State, Reward, Actions). 
 ///
-/// Utilizes child processes to run the game.
+/// Utilizes child processes to run the game. Receives and handles standard output of the game executable by collecting them into structures like vecs for actions. Utilizes find_best on the current state to find the best action in order to perform an update for the previous state and previous action taken. Then uses the decide function to decide what action to take next. This is affected by chance.
 ///
-/// Terminates when the game quits (Once the game quits, program will run into an error when trying to parse the next state. The error is handled by returning the current reward)
+/// This function contains a loop which terminates when the game quits (Once the game quits, program will run into an error when trying to parse the next state. The error is handled by returning the current reward). It will continuously loop between looking for standard output, updating the previous state, and then deciding on which action to take next.
 fn run_game(q_values: &mut HashMap<Key, i32>, gamma: f32, decision_policy: i32) -> String {
 
     // 2. Run game (create the child process) and grab: state, reward, actions

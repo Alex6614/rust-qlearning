@@ -239,7 +239,7 @@
     <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>q_values</span> <span class='op'>=</span> <span class='ident'>HashMap</span>::<span class='ident'>new</span>();
     <span class='kw'>let</span> <span class='ident'>gamma</span> : <span class='ident'>f32</span> <span class='op'>=</span> <span class='number'>0.9</span>;
     <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>iteration</span> :<span class='ident'>i32</span> <span class='op'>=</span> <span class='number'>0</span>;
-    <span class='kw'>let</span> <span class='ident'>decision_policy</span> <span class='op'>=</span> <span class='number'>0</span>;
+    <span class='kw'>let</span> <span class='ident'>decision_policy</span> <span class='op'>=</span> <span class='number'>1</span>;
 
     <span class='comment'>// Run game while printing how many times the game has been played</span>
     <span class='kw'>loop</span>{
@@ -251,11 +251,11 @@
 
 <span class='doccomment'>/// Runs the game and updates the Q-Value table as it plays.</span>
 <span class='doccomment'>///</span>
-<span class='doccomment'>/// This can be run on any game that generates output in a certain format (State, Reward, Actions). Stops when the game quits.</span>
+<span class='doccomment'>/// This can be run on any game that generates output in a certain format (State, Reward, Actions). </span>
 <span class='doccomment'>///</span>
-<span class='doccomment'>/// Utilizes child processes to run the game.</span>
+<span class='doccomment'>/// Utilizes child processes to run the game. Receives and handles standard output of the game executable by collecting them into structures like vecs for actions. Utilizes find_best on the current state to find the best action in order to perform an update for the previous state and previous action taken. Then uses the decide function to decide what action to take next. This is affected by chance.</span>
 <span class='doccomment'>///</span>
-<span class='doccomment'>/// Terminates when the game quits (Once the game quits, program will run into an error when trying to parse the next state. The error is handled by returning the current reward)</span>
+<span class='doccomment'>/// This function contains a loop which terminates when the game quits (Once the game quits, program will run into an error when trying to parse the next state. The error is handled by returning the current reward). It will continuously loop between looking for standard output, updating the previous state, and then deciding on which action to take next.</span>
 <span class='kw'>fn</span> <span class='ident'>run_game</span>(<span class='ident'>q_values</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>HashMap</span><span class='op'>&lt;</span><span class='ident'>Key</span>, <span class='ident'>i32</span><span class='op'>&gt;</span>, <span class='ident'>gamma</span>: <span class='ident'>f32</span>, <span class='ident'>decision_policy</span>: <span class='ident'>i32</span>) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
 
     <span class='comment'>// 2. Run game (create the child process) and grab: state, reward, actions</span>
