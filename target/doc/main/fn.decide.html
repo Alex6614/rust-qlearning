@@ -46,10 +46,12 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-132' class='srclink' href='../src/main/main.rs.html#125-147' title='goto source code'>[src]</a></span></h1>
-<pre class='rust fn'>fn decide(q_values: &amp;<a class='struct' href='https://doc.rust-lang.org/nightly/std/collections/hash/map/struct.HashMap.html' title='std::collections::hash::map::HashMap'>HashMap</a>&lt;<a class='struct' href='../main/structs/struct.Key.html' title='main::structs::Key'>Key</a>, <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>&gt;, current_state: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>, vec: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;&amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></pre><div class='docblock'><p>Decides on which action to use given the Q-value table and what actions are available.</p>
+        </span><a id='src-132' class='srclink' href='../src/main/main.rs.html#141-153' title='goto source code'>[src]</a></span></h1>
+<pre class='rust fn'>fn decide(action_vec: &amp;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;&amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;, best_vec: &amp;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>&gt;, policy: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></pre><div class='docblock'><p>Depending on chance, outputs the actions with the highest reward, or decides on an action depending on the decision policy.</p>
 
-<p>TODO: Make two other &#39;decide&#39; functions that chooses actions in different ways, then see if they are any more efficient</p>
+<p>If the decision policy is 0, it randomly picks an action out of all the actions currently available.</p>
+
+<p>If the decision policy is 1, it picks the second best action</p>
 </div></section>
     <section id='search' class="content hidden"></section>
 

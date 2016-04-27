@@ -1,5 +1,5 @@
 #[derive(Hash, Eq, PartialEq, Debug)]
-/// Describes the current state at which the system is in. At the moment it only allows for one i32 variable but I will extend it to maybe 5 by the end.
+/// Describes the current state at which the system is in. At the moment it only allows for one i32 variable, but this can be extended easily.
 pub struct State {
 	x_1: i32,
 }

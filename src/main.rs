@@ -6,9 +6,11 @@ use structs::{State, Key};
 use std::collections::HashMap;
 use std::process::{Command, Stdio};
 use std::io::prelude::*;
-/// Initializes the Q-value table and the gamma number used in Q-Learning, then runs the game infinitely
+/// Initializes parameters for Q-learning and runs the game infinitely.
+/// 
+/// Initializes the Q-value table, the gamma number, and the decision policy used to decide on actions.
 ///
-/// TODO: Get rid of all the warnings
+/// Prints to console the number of times the game has been played, and the score of each iteration.
 fn main() {
 
     // 1. Initialize structures and learning rates for learning and decision policy
@@ -17,30 +19,31 @@ fn main() {
     let mut iteration :i32 = 0;
     let decision_policy = 1;
 
-    // Initialize other things...
-    // Run game
+    // Run game while printing how many times the game has been played
     loop{
         println!("Iteration number: {}", iteration);
         println!("{}", run_game(&mut q_values, gamma, decision_policy));
         iteration += 1;
     }
 }
-/// Runs the game and updates the Q-Value table as it plays
+
+/// Runs the game and updates the Q-Value table as it plays.
 ///
 /// This can be run on any game that generates output in a certain format (State, Reward, Actions). Stops when the game quits.
 ///
-/// TODO: make running the game and reading the lines a separate function for readability,
-/// change the value in the table from i32s to f32s for higher accuracy
+/// Utilizes child processes to run the game.
+///
+/// Terminates when the game quits (Once the game quits, program will run into an error when trying to parse the next state. The error is handled by returning the current reward)
 fn run_game(q_values: &mut HashMap<Key, i32>, gamma: f32, decision_policy: i32) -> String {
-    // 2. Run game and grab: state, reward, actions
-    // 2a. TODO: Run the game
+
+    // 2. Run game (create the child process) and grab: state, reward, actions
     let mut child = Command::new("solution")
                     .stdin(Stdio::piped()).stdout(Stdio::piped())
                     .spawn().unwrap_or_else(|e| { panic!("failed to execute child: {}", e)});
     let mut buffer = std::io::BufReader::new(child.stdout.take().unwrap());
     let mut input = child.stdin.take().unwrap();
+
     // 2b. Taking in input from the game
-    // (EXTENSION: expect more than one state on a line, split by |)
     let mut states_initial = String::new();
     let mut rewards_initial = String::new();
     let mut actions_initial = String::new();
@@ -50,33 +53,36 @@ fn run_game(q_values: &mut HashMap<Key, i32>, gamma: f32, decision_policy: i32) 
     states_initial = states_initial.trim().to_string();
     rewards_initial = rewards_initial.trim().to_string();
     actions_initial = actions_initial.trim().to_string();
+
     // 2bi. Collecting Actions
     let splitted_actions_initial = actions_initial.split("|");
     let action_vec_initial = splitted_actions_initial.collect::<Vec<&str>>();
 
-    // (PROTOTYPE: assuming states will always be a number)
+    // 2bii. Parsing state as a number
     // If you fail to get a state, that means the game is over and you return the final reward
     let states_initial: i32 = match states_initial.parse() {
         Ok(n) => n,
         _ => return rewards_initial,
     };
+
     // 3. Decide on next action
     // 3a. Create chosen_action: String, score: i32
     // 3b. Iterate through the vec action_vec
     let mut states = states_initial;
-    // let mut previous_action = chosen_action.to_string();
     let mut best_actions = find_best(&q_values, states_initial.clone(), &action_vec_initial);
     let mut previous_action = best_actions[0].clone();
     let mut previous_reward = 0;
+
     // BEGIN LOOP HERE ========================================================
     loop{
-        // 4. Grab next state, reward, actions
-        // Be sure not to overwrite previous states, and chosen_action
 
+        // 4. Grab next state, reward, actions
         let prev_action = previous_action.clone();
         let prev_state = states.clone();
-        // 4a. TODO: Rerun the game with prev_action as the input
-        input.write((prev_action.clone() + "\n").as_bytes()).expect("Failed to read line");
+
+        // 4a. Send input to the game
+        input.write((prev_action.clone() + "\n").as_bytes()).expect("Failed to write to child process");
+
         // 4b. Taking input from the next run
         let mut next_states = String::new();
         let mut next_reward = String::new();
@@ -87,18 +93,20 @@ fn run_game(q_values: &mut HashMap<Key, i32>, gamma: f32, decision_policy: i32) 
         next_states = next_states.trim().to_string();
         next_reward = next_reward.trim().to_string();
         next_actions = next_actions.trim().to_string();
+
         // 4bi. Collecting Actions
         let next_splitted_actions = next_actions.split("|");
         let next_action_vec = next_splitted_actions.collect::<Vec<&str>>();
-        // (PROTOTYPE: assuming states will always be a number)
+
+        // 4bii. Collecting States
         let next_states: i32 = match next_states.parse() {
             Ok(n) => n,
             _ => {
-                // println!{"{:?}", q_values};
                 return previous_reward.to_string()
             },
         };
-        // (PROTOTYPE: assuming states will always be a number)
+
+        // 4biii. Collecting rewards
         let next_reward: i32 = match next_reward.parse() {
             Ok(n) => n,
             _ => return previous_reward.to_string(),
@@ -108,11 +116,8 @@ fn run_game(q_values: &mut HashMap<Key, i32>, gamma: f32, decision_policy: i32) 
         // 5. Find next action
         best_actions = find_best(&q_values,next_states.clone(), &next_action_vec);
         previous_action = best_actions[0].clone();
+
         // 6. Update previous state
-        // println!("The previous action was:{}", prev_action);
-        // println!("The current action is:{}", previous_action);
-        // println!("The previous state was:{}", prev_state);
-        // println!("The current state is:{}", next_states);
         let max_reward:f32;
         match q_values.get(&Key::new(State::new(next_states), previous_action.clone().to_string())){
             Some(reward) => max_reward = *reward as f32,
@@ -124,15 +129,19 @@ fn run_game(q_values: &mut HashMap<Key, i32>, gamma: f32, decision_policy: i32) 
         previous_action = decide(&next_action_vec, &best_actions, decision_policy);
     }
     // END LOOP HERE ========================================================
+
 }
 
-/// Decides on which action to use given the Q-value table and what actions are available.
+/// Depending on chance, outputs the actions with the highest reward, or decides on an action depending on the decision policy.
 ///
-/// TODO: Make two other 'decide' functions that chooses actions in different ways, then see if they are any more efficient
+/// If the decision policy is 0, it randomly picks an action out of all the actions currently available.
+///
+/// If the decision policy is 1, it picks the second best action
+
 fn decide(action_vec: &Vec<&str>, best_vec: &Vec<String>, policy: i32) -> String {
     let mut rng = rand::thread_rng();
     let random_number = rng.gen::<f32>();
-    if random_number < 0.2 {
+    if random_number < 0.3 {
         if policy == 0 {
             rand::thread_rng().choose(&action_vec).unwrap().to_string()
         } else {
@@ -143,7 +152,7 @@ fn decide(action_vec: &Vec<&str>, best_vec: &Vec<String>, policy: i32) -> String
     }
 }
 
-
+/// Looks through actions available and the player's current state, and returns a vector containing two actions that provide the top two rewards
 fn find_best(q_values: &HashMap<Key, i32>, current_state: i32, vec: &Vec<&str>) -> Vec<String> {
     let mut best_score = -10000;
     let mut second_score = -10000;
